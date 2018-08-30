@@ -2,58 +2,51 @@
 Ruby command-line interface to Burp Suite's REST API
 
 # Usage
-	burpcommander VERSION: 1.0.1  -  UPDATED: 08/29/2018
+usage: commander.py [-h] [-t TARGET] [-k KEY] [-p PORT] [-n NAME] [-i ID]
+                    [-U USER] [-P PASSWORD] [-s SCANURL] [-T TASKID] [-m] [-I]
 
-    	-t, --target [IP Address]           Defaults to 127.0.0.1
-    	-p, --port  [Port Number]           Defaults to 1337
-    	-k, --key [API Key]                 If you require an API key specify it here
-    	-i, --issue-type-id [String]        String to search for.  Example: "1048832"
-    	-n, --issue-name [String]           String to search for.  Example: "Command Injection"
-    	-D, --DESCRIPTION                   Returns the description of a requested issue
-    	-M, --METRICS                       Returns the scan_metrics for a given task_id
-    	-I, --ISSUES [Optional Number]      Returns the issue_events of a given task_id
-    	-s, --scan [Complete URL]           Example: https://scantarget.com
-    	-S, --scan-id [Number]              Returns ScanProgress for a given task_id
-    	-U, --username [String]             Username to supply for an authenticated scan
-    	-P, --password [String]             Password to supply for an authenticated scan
-    	-v, --verbose                       Enables verbose output
+PyBurp REST API interface Version 1.0.1
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TARGET, --target TARGET
+                        [IP Address] Defaults to 127.0.0.1
+  -k KEY, --key KEY     [API Key] if you require an API key specify it here
+  -p PORT, --port PORT  [Port Number] Defaults to 1337
+  -n NAME, --name NAME  [String] String to search for e.g. "Command Injection"
+  -i ID, --id ID        [String] String to search for e.g. "1048832"
+  -U USER, --user USER  [String] username for auth scan e.g. "admin"
+  -P PASSWORD, --password PASSWORD
+                        [String] password for auth scan e.g. hunter1
+  -s SCANURL, --scanurl SCANURL
+                        [String] URL to scan e.g. "http://mysite.com"
+  -T TASKID, --taskid TASKID
+                        [Integer] Returns progress for a given scanid
+  -m, --metrics         Returns metrics for a given taskid
+  -I, --issues          [Optional Integer] Returns the issue_events for a
+                        given task_id
 
 
 # Generic Example
-	./burpcommander.rb -k [API Key] -n "command injection" -D
+ python3.7 commander.py --name "Command Injection"
 
 ## Command Output
 <p>Operating system command injection vulnerabilities arise when an application incorporates user-controllable data into a command that is processed by a shell command interpreter. If the user data is not strictly validated, an attacker can use shell metacharacters to modify the command that is executed, and inject arbitrary further commands that will be executed by the server.</p> 
 <p>OS command injection vulnerabilities are usually very serious and may lead to compromise of the server hosting the application, or of the application's own data and functionality. It may also be possible to use the server as a platform for attacks against other systems. The exact potential for exploitation depends upon the security context in which the command is executed, and the privileges that this context has regarding sensitive resources on the server.</p>                                
 
 # Launch a Scan
-	./burpcommander.rb -s www.youcanattackme.com -U admin -P password
+	python3.7 commander.py --scanurl http://localhost:8081
 
-	I, [2018-08-29T15:27:09.310594 #18919]  INFO -- : Successfuly initiated task_id: 4 against www.youcanattackme.com
+	Successfuly initiated task_id: 22 against http://localhost:8081
+
 
 # Query Scan Information
 Get the scan_metrics of a given scan.
 
-	./burpcommander.rb -S 4 -M
+	python3.7 commander.py --taskid 18 --metrics
 
-	{"crawl_requests_made"=>2264,
- 	"crawl_requests_queued"=>0,
- 	"audit_queue_items_completed"=>0,
- 	"audit_queue_items_waiting"=>51,
- 	"audit_requests_made"=>247,
- 	"audit_network_errors"=>10,
- 	"issue_events"=>21}
 
-Get issue number 1 from a given scan.
+```
+{'crawl_requests_made': 1400, 'crawl_requests_queued': 0, 'audit_queue_items_completed': 27, 'audit_queue_items_waiting': 0, 'audit_requests_made': 10190, 'audit_network_errors': 37, 'issue_events': 0}
+```
 
-	./burpcommander.rb -S 4 -I 1
-
-	{"name"=>"File upload functionality",
- 	"type_index"=>5245312,
- 	"serial_number"=>"6437447914508597248",
- 	"origin"=>"http://www.youcanattackme.com",
- 	"path"=>"/vulnerabilities/upload/",
- 	"severity"=>"info",
- 	"confidence"=>"certain",
- 	"description"=>
-	"The page contains a form which is used to submit a user-supplied...

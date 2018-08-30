@@ -63,9 +63,7 @@ class BurpCommander:
         data = post.replace('##username##', username).replace('##password##',
                 password).replace('##scanurl##', scanurl)
 
-        print(data)
         response = self.http.post(path, data)
-        print(response)
         if response.status_code == 201:
             print(f'Successfuly initiated task_id: {response.headers["location"]} against {scanurl}')
         else:
