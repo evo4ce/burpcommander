@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import requests
+import json
 
 parser = argparse.ArgumentParser(description="PyBurp REST API interface Version 1.0.1")
 parser.add_argument('-t', '--target', help='[IP Address] Defaults to 127.0.0.1')
@@ -46,22 +47,21 @@ class BurpCommander:
         password = self.options['password'] if self.options['password'] else ''
         scanurl = self.options['scanurl'] if self.options['scanurl'] else ''
 
-        post = '{' + \
-            '"application_logins": [' + \
-                '{' + \
-                    '"username": "##username##",' + \
-                    '"password": "##password##"' + \
-                '}' + \
-            '],' + \
-            '"urls": [' + \
-                '"##scanurl##"' + \
-            ']' + \
-        '}'
+        post = {
+            "application_logins": [
+                {
+                    "username": username,
+                    "password": password
+                }
+            ],
+            "urls": [
+                scanurl
+            ]
+        }
 
-        data = post.replace('##username##', username).replace('##password##',
-                password).replace('##scanurl##', scanurl)
+        post_data = json.dumps(post)
+        response = self.http.post(path, post_data)
 
-        response = self.http.post(path, data)
         if response.status_code == 201:
             print(f'Successfuly initiated task_id: {response.headers["location"]} against {scanurl}')
         else:
@@ -72,23 +72,24 @@ class BurpCommander:
         return request
     
     def get_issues(self):
-        path = self.path + 'knowledge_base/issue_definitions'
+        path = f'{self.path}knowledge_base/issue_definitions'
         response = self.http.get(path).json()
         return response
     
     def issue_by_name(self, name):
         return  list(map(lambda x: x if name.lower() in
-            x["name"].lower() else f'no issue description found for "{name}"',
+            x['name'].lower() else f'no issue description found for "{name}"',
             self.issues)).pop(0)
 
     def issue_by_id(self, id):
         return  list(map(lambda x: x if id.lower() in
-            x["issue_type_id"].lower() else f'no issue description found for "{id}"',
+            x['issue_type_id'].lower() else f'no issue description found for "{id}"',
             self.issues)).pop(0)
 
 
-bc = BurpCommander(args)
-print(bc.issue_by_name(args['name'])) if args['name'] else None
-print(bc.issue_by_id(args['id'])) if args['id'] else None
-bc.launch_scan() if args['scanurl'] else None
-print(bc.scan_progress()) if args['taskid'] else None
+if __name__ == "__main__":
+    bc = BurpCommander(args)
+    print(bc.issue_by_name(args['name'])) if args['name'] else None
+    print(bc.issue_by_id(args['id'])) if args['id'] else None
+    bc.launch_scan() if args['scanurl'] else None
+    print(bc.scan_progress()) if args['taskid'] else None
