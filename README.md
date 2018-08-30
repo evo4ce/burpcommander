@@ -1,5 +1,5 @@
 # burpcommander
-Ruby command-line interface to Burp Suite's REST API
+*Python* command-line interface to Burp Suite's REST API. This is a fork of [BurpCommander](https://github.com/pentestgeek/burpcommander) by pentestgeek.
 
 # Usage
 ```
