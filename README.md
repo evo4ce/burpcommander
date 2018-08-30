@@ -2,6 +2,7 @@
 Ruby command-line interface to Burp Suite's REST API
 
 # Usage
+```
 usage: commander.py [-h] [-t TARGET] [-k KEY] [-p PORT] [-n NAME] [-i ID]
                     [-U USER] [-P PASSWORD] [-s SCANURL] [-T TASKID] [-m] [-I]
 
@@ -26,6 +27,7 @@ optional arguments:
   -I, --issues          [Optional Integer] Returns the issue_events for a
                         given task_id
 
+```
 
 # Generic Example
  python3.7 commander.py --name "Command Injection"
