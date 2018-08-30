@@ -1,8 +1,6 @@
 #!/usr/bin/ env python3
 import argparse
 import requests
-import json
-
 
 parser = argparse.ArgumentParser(description="PyBurp REST API interface Version 1.0.1")
 parser.add_argument('-t', '--target', help='[IP Address] Defaults to 127.0.0.1')
