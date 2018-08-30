@@ -26,7 +26,7 @@ class BurpCommander:
         self.port = options['port'] if options['port'] else  '1337'
         self.uri = f'http://{self.target}:{self.port}'
         self.path = f'{self.uri}/{options["key"]}/v0.1/' if options['key'] else \
-        f'{self.uri}/v0.1/'
+            f'{self.uri}/v0.1/'
         self.issues = self.get_issues()
 
     def scan_progress(self):
@@ -46,7 +46,6 @@ class BurpCommander:
         password = self.options['password'] if self.options['password'] else ''
         scanurl = self.options['scanurl'] if self.options['scanurl'] else ''
 
-
         post = '{' + \
             '"application_logins": [' + \
                 '{' + \
@@ -58,6 +57,7 @@ class BurpCommander:
                 '"##scanurl##"' + \
             ']' + \
         '}'
+
         data = post.replace('##username##', username).replace('##password##',
                 password).replace('##scanurl##', scanurl)
 
