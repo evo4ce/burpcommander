@@ -37,7 +37,7 @@ class BurpCommander:
         if self.options["metrics"]: return response["scan_metrics"] 
 
         if self.options["issues"]:
-            return response["scan_metrics"]["issue_events"]
+            return response["issue_events"]
         else:
             return response
 
