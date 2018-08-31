@@ -77,15 +77,12 @@ class BurpCommander:
         return response
     
     def issue_by_name(self, name):
-        return  list(map(lambda x: x if name.lower() in
-            x['name'].lower() else f'no issue description found for "{name}"',
-            self.issues)).pop(0)
+        return list(filter(lambda x: name.lower() in x['name'].lower(),
+            self.issues))
 
     def issue_by_id(self, id):
-        return  list(map(lambda x: x if id.lower() in
-            x['issue_type_id'].lower() else f'no issue description found for "{id}"',
-            self.issues)).pop(0)
-
+        return list(filter(lambda x: id.lower() in x['issue_type_id'].lower(),
+            self.issues))
 
 if __name__ == "__main__":
     bc = BurpCommander(args)
